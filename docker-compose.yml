@@ -1,0 +1,15 @@
+services:
+  web:
+    build: .
+    env_file: .env
+    ports: ["8000:8000"]
+    volumes: ["data:/data"]
+    restart: unless-stopped
+  monitor:
+    build: .
+    env_file: .env
+    command: ["python", "-m", "siteguard.monitor"]
+    volumes: ["data:/data"]
+    restart: unless-stopped
+volumes:
+  data:

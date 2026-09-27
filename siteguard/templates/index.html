@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="card">
+  <h1>راقب أمان موقعك تلقائيًا، كل يوم</h1>
+  <p>SiteGuard يفحص موقعك يوميًا ويرسل لك تنبيهًا بالبريد فور ظهور مشكلة: شهادة SSL قاربت على الانتهاء، ترويسات أمان ناقصة، ملفات حساسة مكشوفة، أو بريد يمكن انتحاله بسبب غياب SPF و DMARC. كل تنبيه معه خطوات الإصلاح بلغة بسيطة.</p>
+  <a class="btn" href="{{ url_for('signup') }}">ابدأ مجانًا</a>
+</section>
+<section class="grid">
+  {% for key, p in plans.items() %}
+  <div class="card">
+    <h2>{{ p.name }}</h2>
+    <p class="score">${{ p.price }}<small style="font-size:.3em">/شهريًا</small></p>
+    <p>حتى {{ p.domains }} {% if p.domains == 1 %}نطاق{% else %}نطاقات{% endif %}، فحص يومي وتنبيهات بالبريد.</p>
+  </div>
+  {% endfor %}
+</section>
+<section class="card">
+  <h3>فحص أخلاقي وقانوني</h3>
+  <p>لا نفحص أي موقع قبل أن يثبت صاحبه ملكيته بإضافة سجل DNS. الفحوص سلبية وخفيفة، مثل زيارة عادية للموقع، ولا تحاول اختراق أي شيء.</p>
+</section>
+{% endblock %}

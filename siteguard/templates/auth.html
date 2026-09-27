@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="card" style="max-width:420px;margin:auto">
+  <h2>{% if mode == 'signup' %}إنشاء حساب{% else %}تسجيل الدخول{% endif %}</h2>
+  <form method="post">
+    <input type="hidden" name="csrf" value="{{ csrf_token }}">
+    <label>البريد الإلكتروني<input name="email" type="email" required dir="ltr"></label>
+    <label>كلمة المرور<input name="password" type="password" minlength="8" required dir="ltr"></label>
+    <button>{% if mode == 'signup' %}إنشاء الحساب{% else %}دخول{% endif %}</button>
+  </form>
+</section>
+{% endblock %}

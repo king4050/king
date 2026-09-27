@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="card">
+  <h2 dir="ltr" style="text-align:right">{{ d.name }}</h2>
+  {% if not d.verified_at %}
+    <p>لإثبات أنك صاحب النطاق، أضف هذا السجل في إعدادات DNS لدى مزود النطاق:</p>
+    <p>النوع: <code>TXT</code></p>
+    <p>الاسم: <code>{{ record_name }}</code></p>
+    <p>القيمة: <code>{{ record_value }}</code></p>
+    <form method="post" action="{{ url_for('verify_domain', domain_id=d.id) }}">
+      <input type="hidden" name="csrf" value="{{ csrf_token }}">
+      <button>تحقق الآن</button>
+    </form>
+  {% else %}
+    {% if report %}
+      <p>التقييم الأمني</p>
+      <p class="score">{{ report.score }}/100</p>
+      <p>آخر فحص: {{ report.created_at }}</p>
+    {% endif %}
+    <form class="inline" method="post" action="{{ url_for('scan', domain_id=d.id) }}">
+      <input type="hidden" name="csrf" value="{{ csrf_token }}">
+      <button>افحص الآن</button>
+    </form>
+  {% endif %}
+</section>
+{% if d.verified_at and report %}
+<section class="card">
+  <h3>النتائج</h3>
+  {% for f in findings %}
+    <div class="card" style="background:#0f172a">
+      <span class="sev {{ f.severity }}">{{ {'high':'خطير','medium':'متوسط','low':'منخفض','info':'معلومة'}[f.severity] }}</span>
+      <strong>{{ f.title }}</strong>
+      <p>الحل: {{ f.fix }}</p>
+    </div>
+  {% else %}
+    <p>🎉 لا توجد مشاكل. موقعك في حالة ممتازة.</p>
+  {% endfor %}
+</section>
+{% endif %}
+<form method="post" action="{{ url_for('delete_domain', domain_id=d.id) }}">
+  <input type="hidden" name="csrf" value="{{ csrf_token }}">
+  <button class="secondary">حذف النطاق</button>
+</form>
+{% endblock %}
